@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <div id="maincontainer"></div>
+    <script>
+      var maincontainer = document.getElementById("maincontainer");
+
+      var heading = document.createElement("h2");
+      heading.textContent = "Exercise 04: JavaScript&DOM";
+      maincontainer.appendChild(heading);
+
+      var btn = document.createElement("button");
+      btn.textContent = "Click me to display Date and Time";
+
+      var w;
+      function startWorker() {
+        if (typeof(Worker) !== "undefined") {
+          if (typeof(w) == "undefined") {
+            w = new Worker("worker.js");
+          }
+          w.onmessage = function(event) {
+            btn.textContent = event.data.dateTime;
+            btn.style.color = event.data.color;
+            btn.style.backgroundColor = event.data.background;
+            btn.style.position = "fixed";
+            btn.style.top = "0px";
+            btn.style.right = "0px";
+          };
+        } else {
+          btn.textContent = "Sorry! No Web Worker support.";
+        }
+      }
+
+      function stopWorker() {
+        btn.style.position = 'static';
+        w.terminate();
+        w = undefined;
+      }
+
+      var clicked = false
+      btn.addEventListener("click", function () {
+        if (clicked) {
+          stopWorker();
+        } else {
+          startWorker();
+        }
+        clicked = !clicked;
+      });
+      maincontainer.appendChild(btn);
+
+      maincontainer.appendChild(document.createElement("br"));
+      maincontainer.appendChild(document.createElement("br"));
+
+      var infoButton = document.createElement("a");
+      infoButton.textContent = "Personal Info";
+      infoButton.style.textDecoration = "underline";
+      infoButton.style.color = "pink";
+      infoButton.style.cursor = "pointer";
+      infoButton.style.display = "inline-block";
+
+      infoButton.onmouseover = function () {
+        this.style.color = "blue";
+        this.style.background = "yellow";
+      };
+      infoButton.onmouseout = function () {
+        this.style.color = "pink";
+        this.style.background = "";
+      };
+      maincontainer.appendChild(infoButton);
+
+      var info = [
+        "Vivat Techakosol ID: 65011001",
+        "Subject: Web Application Development",
+        "Semester: 2",
+      ];
+      var list = document.createElement("ul");
+
+      info.forEach(function (name) {
+        var listItem = document.createElement("li");
+        listItem.textContent = name;
+        list.appendChild(listItem);
+      });
+      list.style.display = "none";
+
+      infoButton.addEventListener("click", function () {
+        if (list.style.display === "none") {
+          list.style.display = "block";
+        } else {
+          list.style.display = "none";
+        }
+      });
+      maincontainer.appendChild(list);
+
+      var snapshots = document.createElement("h1");
+      snapshots.textContent = "Snapshots";
+      maincontainer.appendChild(snapshots);
+
+      var shots = ["Firework", "Crest", "Action", "Buffalo"];
+      var shotList = document.createElement("ul");
+      var imagePaths = [
+                        "https://a0.cdn.japantravel.com/photo/42-218191/800!/osaka-yodogawa-fireworks-218191.jpg",
+                        "https://lh3.googleusercontent.com/0YiApMHe7p_rMza2gqakDFIC25EgrSKDjoBWkM4loKbJyqeO2Hw3OtBF4tb5iz0hfUFEa5gj1nNanYOFnaz9VI_6=s1280-w1280-h800",
+                        "https://assets.beartai.com/uploads/2023/03/COVER-Donnie-Yen-John-Wick-Chapter-4.jpg",
+                        "https://news.emory.edu/stories/2023/08/esc_bison_impact_24-08-2023/thumbs/story_main.jpg"
+                        ];
+
+      var frame = document.createElement("img");
+      frame.src = 'https://www.photoschoolthailand.com/wp-content/uploads/2020/11/Panorama_4.jpg';
+      frame.style.width = "500px";
+        
+      shots.forEach(function (name, index) {
+        var listItem = document.createElement("li");
+        var spanItem = document.createElement("a");
+        
+        spanItem.textContent = name;
+        spanItem.style.textDecoration = "underline";
+        spanItem.style.color = "blue";
+        spanItem.style.cursor = "pointer";
+
+        var img = document.createElement("img");
+        img.src = imagePaths[index];
+        img.style.display = "none";
+
+        spanItem.addEventListener("click", function () {
+            if (img.style.display === "none") {
+                frame.src = img.src
+            } else {
+                frame.style.display = "none";
+            }
+        });
+        listItem.appendChild(spanItem);
+        shotList.appendChild(listItem);
+      });
+
+      shotList.style.display = "block";
+      maincontainer.appendChild(shotList);
+      maincontainer.appendChild(frame)
+
+    </script>
+  </body>
+</html>
